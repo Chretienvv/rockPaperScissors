@@ -2,6 +2,11 @@ const SELECTION_BUTTONS = document.querySelectorAll('[data-selection]')
 const RESULTS_COLUMN = document.querySelector('[data-results-column]')
 const YOUR_SCORE_SPAN = document.querySelector('[data-your-score')
 const COMPUTER_SCORE_SPAN = document.querySelector('[data-computer-score]')
+const WINS_FORM = document.getElementById("winsForm");
+
+const gameInformation = {
+    amountOfWins: 1
+}
 
 const SELECTIONS = [
     {
@@ -20,6 +25,11 @@ const SELECTIONS = [
         beats: 'paper'
     }
 ]
+
+WINS_FORM.addEventListener("submit", event => {
+    event.preventDefault();
+    gameInformation.amountOfWins = parseInt(WINS_FORM.elements.amountWins.value)
+});
 
 SELECTION_BUTTONS.forEach(SELECTION_BUTTON => {
     SELECTION_BUTTON.addEventListener('click', event => {
@@ -41,7 +51,9 @@ function makeSelection(selection) {
 }
 
 function checkForMatchWinner(scoreSpan) {
-    if (parseInt(scoreSpan.innerHTML.split(" ")[1]) === 3) {
+    console.log( gameInformation.amountOfWins)
+    console.log(parseInt(scoreSpan.innerHTML.split(" ")[1]))
+    if (parseInt(scoreSpan.innerHTML.split(" ")[1]) ===  gameInformation.amountOfWins) {
         showWinner(scoreSpan)
         clearHistory()
         resetWins()

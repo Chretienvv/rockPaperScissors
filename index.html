@@ -12,7 +12,12 @@
       <button class="selection" data-selection="scissors">🖖</button>
       <button class="selection" data-selection="rock">✊</button>
     </section>
-    <section>
+    <section class="win-form">
+        <form id="winsForm">
+            <label for="amountWins">Wins for the victory</label>
+            <input type="number" min="0" name="amountWins">
+            <input type="submit">
+        </form>
     </section>
     <section data-results-column class="results">
       <div>
