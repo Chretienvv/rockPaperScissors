@@ -25,9 +25,8 @@
 }
 
 .result-score {
-  margin: left 0.1rem;
-  font-size: 0.5rem;
   color: #333;
+  font-size:1.5rem
 }
 
 .result-selection.winner{

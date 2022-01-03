@@ -1,9 +1,9 @@
 const SELECTION_BUTTONS = document.querySelectorAll('[data-selection]')
-const FINAL_COLUMN = document.querySelector('[data-final-column]')
-const YOUR_SCORE_SPAN =document.querySelector('[data-your-score')
-const COMPUTER_SCORE_SPAN =document.querySelector('[data-computer-score]')
+const RESULTS_COLUMN = document.querySelector('[data-results-column]')
+const YOUR_SCORE_SPAN = document.querySelector('[data-your-score')
+const COMPUTER_SCORE_SPAN = document.querySelector('[data-computer-score]')
 
-const SELECTIONS =[
+const SELECTIONS = [
     {
         name: 'rock',
         emoji: '✊',
@@ -29,35 +29,64 @@ SELECTION_BUTTONS.forEach(SELECTION_BUTTON => {
     })
 })
 
-function makeSelection(selection){
+function makeSelection(selection) {
     const COMPUTER_SELECTION = randomSelection(selection)
     const YOUR_WINNER = isWinner(selection, COMPUTER_SELECTION)
     const COMPUTER_WINNER = isWinner(COMPUTER_SELECTION, selection)
     addSelectionResult(COMPUTER_SELECTION, COMPUTER_WINNER)
     addSelectionResult(selection, YOUR_WINNER)
-    if(YOUR_WINNER) incrementScore(YOUR_SCORE_SPAN)
-    if(COMPUTER_WINNER) incrementScore(COMPUTER_SCORE_SPAN)
+    if (YOUR_WINNER) incrementScore(YOUR_SCORE_SPAN, selection)
+    if (COMPUTER_WINNER) incrementScore(COMPUTER_SCORE_SPAN, COMPUTER_WINNER)
+
 }
 
-function isWinner(selection, opponentSelection){
+function checkForMatchWinner(scoreSpan) {
+    if (parseInt(scoreSpan.innerHTML.split(" ")[1]) === 3) {
+        showWinner(scoreSpan)
+        clearHistory()
+        resetWins()
+    }
+    return false
+}
+
+function showWinner(scoreSpan) {
+    window.alert(`The winner is ${scoreSpan.previousElementSibling.innerHTML} Scoreboard: ${YOUR_SCORE_SPAN.innerHTML.split(" ")[1]} against ${COMPUTER_SCORE_SPAN.innerHTML.split(" ")[1]} `)
+}
+
+function isWinner(selection, opponentSelection) {
     return selection.beats === opponentSelection.name
 }
 
-function randomSelection(){
-    const RANDOM_INDEX= Math.floor(Math.random() * SELECTIONS.length)
+function randomSelection() {
+    const RANDOM_INDEX = Math.floor(Math.random() * SELECTIONS.length)
     return SELECTIONS[RANDOM_INDEX]
 }
 
-function addSelectionResult(selection, winner){
+function addSelectionResult(selection, winner) {
     console.log(selection, winner)
     let div = document.createElement('div')
-    console.log(div)
-    div.innerText =selection.emoji 
+    div.innerText = selection.emoji
     div.classList.add('result-selection')
-    if(winner) div.classList.add('winner')
-    FINAL_COLUMN.after(div)
+    if (winner) div.classList.add('winner')
+    RESULTS_COLUMN.appendChild(div)
 }
 
-function incrementScore(scoreSpan){
-    scoreSpan.innerHTML = parseInt(scoreSpan.innerHTML) + 1
+function incrementScore(scoreSpan,) {
+    let score = parseInt(scoreSpan.innerHTML.split(" ")[1]) + 1
+    scoreSpan.innerHTML = `Wins: ${score}`
+    checkForMatchWinner(scoreSpan)
 }
+
+function clearHistory() {
+    const ADDED_RESULTS = [document.getElementsByClassName('result-selection')]
+    ADDED_RESULTS.forEach(result => {
+        Array.from(result).forEach(element => element.remove())
+    })
+    resetWins()
+}
+
+function resetWins() {
+    YOUR_SCORE_SPAN.innerHTML = "Wins: 0"
+    COMPUTER_SCORE_SPAN.innerHTML = "Wins: 0"
+}
+
